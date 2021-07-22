@@ -15,6 +15,8 @@ module.exports = {
     },
     `gatsby-plugin-emotion`,
     `gatsby-plugin-react-helmet`,
+
+    // 마크다운 파일이 추가 되는 위치
     {
       resolve: `gatsby-source-filesystem`,
       options: {
