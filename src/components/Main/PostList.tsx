@@ -13,6 +13,25 @@ const POST_ITEM_DATA = {
   link: '<https://www.google.co.kr/>',
 };
 
+export type PostType = {
+  node: {
+    id: string;
+    frontmatter: {
+      title: string;
+      summary: string;
+      date: string;
+      categories: string[];
+      thumbnail: {
+        publicURL: string;
+      };
+    };
+  };
+};
+
+interface PostListProps {
+  posts: PostType[];
+}
+
 const PostListWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -28,13 +47,27 @@ const PostListWrapper = styled.div`
   }
 `;
 
-const PostList: FunctionComponent = function () {
+const PostList: FunctionComponent = function ({ posts }) {
   return (
     <PostListWrapper>
-      <PostItem {...POST_ITEM_DATA} />
-      <PostItem {...POST_ITEM_DATA} />
-      <PostItem {...POST_ITEM_DATA} />
-      <PostItem {...POST_ITEM_DATA} />
+      {posts.map(
+        ({
+          node: {
+            id,
+            frontmatter: {
+              thumbnail: { publicURL },
+              ...rest
+            },
+          },
+        }: PostType) => (
+          <PostItem
+            {...rest}
+            thumbnail={publicURL}
+            link="<https://www.google.co.kr/>"
+            key={id}
+          />
+        ),
+      )}
     </PostListWrapper>
   );
 };
