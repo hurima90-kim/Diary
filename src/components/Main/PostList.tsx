@@ -1,17 +1,18 @@
 import React, { FunctionComponent } from 'react';
 import styled from '@emotion/styled';
 import PostItem from './PostItem';
+import { FluidObject } from 'gatsby-image';
 
-const POST_ITEM_DATA = {
-  title: 'Post Item Title',
-  date: '2020.01.29',
-  categories: ['Web', 'Frontend', 'Testing'],
-  summary:
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident repellat doloremque fugit quis rem temporibus! Maxime molestias, suntrem debitis odit harum impedit. Modi cupiditate harum dignissimos eos in corrupti!',
-  thumbnail:
-    'https://ji5485.github.io/static/e4f34c558ae8e8235ff53b0311085796/4d854/javascript-core-concept-summary-function-1.webp',
-  link: '<https://www.google.co.kr/>',
-};
+// const POST_ITEM_DATA = {
+//   title: 'Post Item Title',
+//   date: '2020.01.29',
+//   categories: ['Web', 'Frontend', 'Testing'],
+//   summary:
+//     'Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident repellat doloremque fugit quis rem temporibus! Maxime molestias, suntrem debitis odit harum impedit. Modi cupiditate harum dignissimos eos in corrupti!',
+//   thumbnail:
+//     'https://ji5485.github.io/static/e4f34c558ae8e8235ff53b0311085796/4d854/javascript-core-concept-summary-function-1.webp',
+//   link: '<https://www.google.co.kr/>',
+// };
 
 export type PostType = {
   node: {
@@ -22,12 +23,15 @@ export type PostType = {
       date: string;
       categories: string[];
       thumbnail: {
-        publicURL: string;
+        childImageSharp: {
+          fluid: FluidObject;
+        };
       };
     };
   };
 };
 
+// posts에 대한 타입 정의
 interface PostListProps {
   posts: PostType[];
 }
@@ -47,27 +51,16 @@ const PostListWrapper = styled.div`
   }
 `;
 
-const PostList: FunctionComponent = function ({ posts }) {
+const PostList: FunctionComponent<PostListProps> = function ({ posts }) {
   return (
     <PostListWrapper>
-      {posts.map(
-        ({
-          node: {
-            id,
-            frontmatter: {
-              thumbnail: { publicURL },
-              ...rest
-            },
-          },
-        }: PostType) => (
-          <PostItem
-            {...rest}
-            thumbnail={publicURL}
-            link="<https://www.google.co.kr/>"
-            key={id}
-          />
-        ),
-      )}
+      {posts.map(({ node: { id, frontmatter } }: PostType) => (
+        <PostItem
+          {...frontmatter}
+          link="<https://www.google.co.kr/>"
+          key={id}
+        />
+      ))}
     </PostListWrapper>
   );
 };
