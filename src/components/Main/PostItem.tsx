@@ -29,7 +29,7 @@ const PostItemWrapper = styled(Link)`
   }
 `;
 
-const ThumbnailImage = styled.img`
+const ThumbnailImage = styled(Img)`
   width: 100%;
   height: 200px;
   border-radius: 10px 10px 0 0;

@@ -2,6 +2,7 @@ import React, { FunctionComponent } from 'react';
 import styled from '@emotion/styled';
 import PostItem from './PostItem';
 import { FluidObject } from 'gatsby-image';
+import { useMemo } from 'react';
 
 // const POST_ITEM_DATA = {
 //   title: 'Post Item Title',
@@ -33,6 +34,7 @@ export type PostType = {
 
 // posts에 대한 타입 정의
 interface PostListProps {
+  selectedCategory: string;
   posts: PostType[];
 }
 
@@ -51,10 +53,28 @@ const PostListWrapper = styled.div`
   }
 `;
 
-const PostList: FunctionComponent<PostListProps> = function ({ posts }) {
+const PostList: FunctionComponent<PostListProps> = function ({
+  selectedCategory,
+  posts,
+}) {
+  // selectedCategory 값을 지닌 포스트 아이템만 필터링하기 위한 기능
+  const postListData = useMemo(
+    () =>
+      posts.filter(
+        ({
+          node: {
+            frontmatter: { categories },
+          },
+        }: PostType) =>
+          selectedCategory !== 'All'
+            ? categories.includes(selectedCategory)
+            : true,
+      ),
+    [selectedCategory],
+  );
   return (
     <PostListWrapper>
-      {posts.map(({ node: { id, frontmatter } }: PostType) => (
+      {postListData.map(({ node: { id, frontmatter } }: PostType) => (
         <PostItem
           {...frontmatter}
           link="<https://www.google.co.kr/>"
